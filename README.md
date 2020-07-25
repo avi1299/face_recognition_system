@@ -79,12 +79,29 @@ The possible reasons for the errors could be:
 
 ## Instructions to run
 
-- Clone the project and download the source code.
-- Once inside the folder, run the following command: 
-    `python3 app.py`
-- Go to: `localhost:5000` in your browser
-- First Register yourself by clicking on `Register Image`
-- Mark your attendance by clicking on `Start Surveillance Image`
+
+To run the model, first clone the repository
+```
+git clone https://github.com/vismit2000/face-recognition-attendance-system.git
+
+```
+
+Shift to the cloned directory
+```
+cd face-recognition-attendance-system
+```
+
+Once inside the folder, run the following command: 
+```
+python3 app.py
+```
+
+Go to: `localhost:5000` in your browser.
+
+First Register yourself by clicking on `Register Image`
+
+Mark your attendance by clicking on `Start Surveillance Image`
+
 
 ## Team Members
 
