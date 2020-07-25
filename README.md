@@ -85,3 +85,8 @@ The possible reasons for the errors could be:
 - Go to: `localhost:5000` in your browser
 - First Register yourself by clicking on `Register Image`
 - Mark your attendance by clicking on `Start Surveillance Image`
+
+## Team Members
+
+1. Vishal Mittal [Profile](https://github.com/vismit2000)
+2. Harsh Sulakhe [Profile](https://github.com/HarshSulakhe)
