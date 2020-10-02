@@ -1,5 +1,6 @@
 import face_recognition.api as face_recognition
-import cv2, pickle, os, csv, stat
+import pickle, os, csv, stat
+from cv2 import cv2
 import numpy as np
 from datetime import datetime
 import matplotlib.pyplot as plt
@@ -8,7 +9,7 @@ import matplotlib as mpl
 def mark_your_attendance():
 
     mpl.rcParams['toolbar'] = 'None'
-    STORAGE_PATH = "/home/harsh/face-recognition-attendance-system/storage"
+    STORAGE_PATH = "/home/avinash/Desktop/face-recognition-attendance-system/storage"
 
     try:
         with open( os.path.join(STORAGE_PATH, "known_face_ids.pickle"),"rb") as fp:
@@ -23,7 +24,7 @@ def mark_your_attendance():
 
 
     # CSV_PATH = "/home/harsh/Backup/face-recognition/data/attendance.csv"
-    CSV_PATH = "/home/harsh/face-recognition-attendance-system/static/data/attendance.csv"
+    CSV_PATH = "/home/avinash/Desktop/face-recognition-attendance-system/static/data/attendance.csv"
 
 
     if(os.path.exists(CSV_PATH)):
@@ -46,8 +47,8 @@ def mark_your_attendance():
     marked = True
 
     video_capture = cv2.VideoCapture(0)
-    ret, frame = video_capture.read()
-
+    #ret, frame = video_capture.read()
+    _,frame = video_capture.read()
     plot = plt.subplot(1,1,1)
     plt.title("Detecting Face")
     plt.axis('off')
@@ -55,7 +56,7 @@ def mark_your_attendance():
 
     while True:
         # Grab a single frame of video
-        ret, frame = video_capture.read()
+        _,frame = video_capture.read()
         # print("FRAME READ WORKS")
         # Resize frame of video to 1/4 size for faster face recognition processing
         small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)

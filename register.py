@@ -1,5 +1,6 @@
 import face_recognition.api as face_recognition
-import cv2, os, time, pickle
+import os, time, pickle
+from cv2 import cv2
 import numpy as np
 # from mtcnn import MTCNN
 import json
@@ -12,8 +13,8 @@ def register_yourself(student_id):
 
     mpl.rcParams['toolbar'] = 'None'
     # PATH = "/home/harsh/Backup/face-recognition/data"
-    PATH = "/home/harsh/face-recognition-attendance-system/static/data"
-    STORAGE_PATH = "/home/harsh/face-recognition-attendance-system/storage"
+    PATH = "/home/avinash/Desktop/face-recognition-attendance-system/static/data"
+    STORAGE_PATH = "/home/avinash/Desktop/face-recognition-attendance-system/storage"
 
     try:
         os.makedirs(PATH)
