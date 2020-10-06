@@ -13,8 +13,9 @@ def register_yourself(student_id):
 
     mpl.rcParams['toolbar'] = 'None'
     # PATH = "/home/harsh/Backup/face-recognition/data"
-    PATH = "/home/avinash/Desktop/face-recognition-attendance-system/static/data"
-    STORAGE_PATH = "/home/avinash/Desktop/face-recognition-attendance-system/storage"
+    PROJECT_PATH = "/home/avinash/Desktop/face-recognition-attendance-system"
+    PATH = PROJECT_PATH+"/static/data"
+    STORAGE_PATH = PROJECT_PATH+"/storage"
 
     try:
         os.makedirs(PATH)

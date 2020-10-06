@@ -5,11 +5,14 @@ import numpy as np
 from datetime import datetime
 import matplotlib.pyplot as plt
 import matplotlib as mpl
+import sqlite3
+
 
 def mark_your_attendance():
 
     mpl.rcParams['toolbar'] = 'None'
-    STORAGE_PATH = "/home/avinash/Desktop/face-recognition-attendance-system/storage"
+    PROJECT_PATH = "/home/avinash/Desktop/face-recognition-attendance-system"
+    STORAGE_PATH = PROJECT_PATH+"/storage"
 
     try:
         with open( os.path.join(STORAGE_PATH, "known_face_ids.pickle"),"rb") as fp:
@@ -24,7 +27,8 @@ def mark_your_attendance():
 
 
     # CSV_PATH = "/home/harsh/Backup/face-recognition/data/attendance.csv"
-    CSV_PATH = "/home/avinash/Desktop/face-recognition-attendance-system/static/data/attendance.csv"
+    CSV_PATH = PROJECT_PATH+"/static/data/attendance.csv"
+    DB_PATH = PROJECT_PATH+"/static/data/attendance.db"
 
 
     if(os.path.exists(CSV_PATH)):
@@ -36,6 +40,20 @@ def mark_your_attendance():
         csv_file = open(CSV_PATH, "w+")
         writer = csv.writer(csv_file)
         writer.writerow(["Student ID", "Date", "Time of Entry"])
+
+    if(os.path.exists(DB_PATH)):
+        conn = sqlite3.connect(DB_PATH)
+        c=conn.cursor()
+
+    else:
+        #os.mknod(DB_PATH)
+        conn = sqlite3.connect(DB_PATH)
+        c=conn.cursor()
+        c.execute('''CREATE TABLE IF NOT EXISTS ATTENDANCE
+         (ID        TEXT   NOT NULL,
+         TIMESTAMP  TEXT       NOT NULL,
+         IN_OR_OUT  TEXT);''')
+        conn.commit()
 
     name = "Unknown"
     face_locations = []
@@ -165,6 +183,9 @@ def mark_your_attendance():
             date = dt_string.split(" ")[0]
             time = dt_string.split(" ")[1]
             writer.writerow([name, date, time])
+            c.execute("INSERT INTO ATTENDANCE VALUES (?,datetime('now'),'IN');",(name, ))
+            conn.commit()
+
             # print(name + date + time)
             break
 
@@ -173,6 +194,7 @@ def mark_your_attendance():
     plt.close()
     video_capture.release()
     cv2.destroyAllWindows()
+    conn.close()
 
     return marked
 
