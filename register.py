@@ -99,7 +99,6 @@ def register_yourself(student_id):
             # Whenever the program captures the face, we will write that is a folder
             # Before capturing the face, we need to tell the script whose face it is
             # For that we will need an identifier, here we call it id
-            # So now we captured a face, we need to write it in a file
             
             # Saving the image dataset, but only the face part, cropping the rest
 
@@ -123,6 +122,8 @@ def register_yourself(student_id):
 
         plt.show()
         if(i % 30 == 0):
+            
+            # So now we captured a face, we need to write it in a file
             cv2.imwrite(IMAGE_PATH + "/{}_".format(student_id) + str(j) + ".jpg", face_aligned)
             try:
                 known_face_encodings.append(face_recognition.face_encodings(frame)[0])
