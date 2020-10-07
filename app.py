@@ -25,9 +25,19 @@ def registration():
     return render_template("register.html")
 
 
-@app.route('/attendance', methods=['GET', 'POST'])
-def attendance():
-    marked = mark_your_attendance()
+@app.route('/attendance_in', methods=['GET', 'POST'])
+def attendance_in():
+    marked = mark_your_attendance(0)
+    if(marked == True):
+        flash("Attendence Marked Successfully")
+    else:
+        flash("You are not registered yet")
+
+    return render_template("index.html")
+
+@app.route('/attendance_out', methods=['GET', 'POST'])
+def attendance_out():
+    marked = mark_your_attendance(1)
     if(marked == True):
         flash("Attendence Marked Successfully")
     else:
