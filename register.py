@@ -8,7 +8,6 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 # load image using cv2....and do processing.
 
-
 def register_yourself(student_id):
 
     mpl.rcParams['toolbar'] = 'None'
