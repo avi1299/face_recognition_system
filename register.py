@@ -45,7 +45,7 @@ def register_yourself(student_id):
 
 
     detector = dlib.get_frontal_face_detector()
-    predictor = dlib.shape_predictor('./shape_predictor_68_face_landmarks.dat')   #Add path to the shape predictor ######CHANGE TO RELATIVE PATH LATER
+    predictor = dlib.shape_predictor('./dlib/shape_predictor_68_face_landmarks.dat')   #Add path to the shape predictor ######CHANGE TO RELATIVE PATH LATER
     fa = FaceAligner(predictor, desiredFaceWidth = 96)
 
     print("[INFO] Initializing Video stream")
