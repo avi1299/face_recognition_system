@@ -24,6 +24,9 @@ def home_after_registration():
 def registration():
     return render_template("register.html")
 
+@app.route('/registration_page', methods=['GET', 'POST'])
+def registration_page():
+    return render_template("registration_page.html")
 
 @app.route('/attendance_in', methods=['GET', 'POST'])
 def attendance_in():

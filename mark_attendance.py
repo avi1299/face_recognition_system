@@ -201,5 +201,4 @@ def mark_your_attendance(entry_or_exit):
 
     return marked
 
-
 # mark_your_attendance()
