@@ -11,7 +11,7 @@ import sqlite3
 def mark_your_attendance(entry_or_exit):
 
     mpl.rcParams['toolbar'] = 'None'
-    PROJECT_PATH = "/home/avinash/Desktop/face-recognition-attendance-system"
+    PROJECT_PATH = "/home/avinash/Desktop/Projects/face-recognition-attendance-system"
     STORAGE_PATH = PROJECT_PATH+"/storage"
 
     try:

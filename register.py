@@ -17,7 +17,8 @@ def register_yourself(student_id):
 
     mpl.rcParams['toolbar'] = 'None'
     # PATH = "/home/harsh/Backup/face-recognition/data"
-    PROJECT_PATH = "D:/Acads/Projects/Identity Detection/face_recognition_system"
+    #PROJECT_PATH = "D:/Acads/Projects/Identity Detection/face_recognition_system"
+    PROJECT_PATH = "/home/avinash/Desktop/Projects/face-recognition-attendance-system"
     PATH = PROJECT_PATH+"/static/data"
     STORAGE_PATH = PROJECT_PATH+"/storage"
 
