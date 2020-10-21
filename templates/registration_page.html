@@ -19,6 +19,14 @@
 
 <body >
 
+    <div class="col-lg-12" style="background: rgba(0,0,0,0.6);max-height: 20px ; padding-top:1em;padding-bottom:3em;color:#fff;border-radius:10px;-webkit-box-shadow: 2px 2px 15px 0px rgba(0, 3, 0, 0.7);
+    -moz-box-shadow:    2px 2px 15px 0px rgba(0, 3, 0, 0.7);
+    box-shadow:         2px 2px 15px 0px rgba(0, 3, 0, 0.7); margin-left:auto; margin-right: auto; ">
+
+      <a href="/"><h5 class="text-left">Back</h5></a>
+
+    </div>
+
    <div class="container" style="min-height:100% ;width:80%">
       {% with messages = get_flashed_messages() %}
         {% if messages %}
@@ -88,11 +96,11 @@ box-shadow:         2px 2px 15px 0px rgba(0, 3, 0, 0.7);">
           </div>
         
           <div class="col-md-4" style="padding-left: 175px">
-              <a href='/Add Photos'><img src="{{ url_for('static', filename='Images/addphotos.png') }}" class="img-responsive" style="width:350px;height:350px ;" /></a>
+              <a href='/add_photos'><img src="{{ url_for('static', filename='Images/addphotos.png') }}" class="img-responsive" style="width:350px;height:350px ;" /></a>
           </div>
           
           <div class="col-md-4" style="padding-left: 175px">
-              <a href='/De-register'><img src="{{ url_for('static', filename='Images/delete_registration.jpg') }}" class="img-responsive" style="width:300px;height:300px"/></a>
+              <a href='/deregister'><img src="{{ url_for('static', filename='Images/delete_registration.jpg') }}" class="img-responsive" style="width:300px;height:300px"/></a>
           </div>
 
       </div>

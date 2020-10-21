@@ -8,7 +8,7 @@ import matplotlib as mpl
 import sqlite3
 
 
-def mark_your_attendance(entry_or_exit):
+def mark_your_attendance(location):
 
     mpl.rcParams['toolbar'] = 'None'
     PROJECT_PATH = "/home/avinash/Desktop/Projects/face-recognition-attendance-system"
@@ -52,7 +52,7 @@ def mark_your_attendance(entry_or_exit):
         c.execute('''CREATE TABLE IF NOT EXISTS ATTENDANCE
          (ID        TEXT   NOT NULL,
          TIMESTAMP  TEXT       NOT NULL,
-         IN_OR_OUT  TEXT);''')
+         LOCATION  TEXT);''')
         conn.commit()
 
     name = "Unknown"
@@ -183,10 +183,11 @@ def mark_your_attendance(entry_or_exit):
             date = dt_string.split(" ")[0]
             time = dt_string.split(" ")[1]
             writer.writerow([name, date, time])
-            if(entry_or_exit==0):
-                c.execute("INSERT INTO ATTENDANCE VALUES (?,datetime('now'),'IN');",(name, ))
-            else:
-                c.execute("INSERT INTO ATTENDANCE VALUES (?,datetime('now'),'OUT');",(name, ))
+            # if(entry_or_exit==0):
+            #     c.execute("INSERT INTO ATTENDANCE VALUES (?,datetime('now'),'IN');",(name, ))
+            # else:
+            #     c.execute("INSERT INTO ATTENDANCE VALUES (?,datetime('now'),'OUT');",(name, ))
+            c.execute("INSERT INTO ATTENDANCE VALUES (?,datetime('now'),?);",(name, location, ))
             conn.commit()
 
             # print(name + date + time)

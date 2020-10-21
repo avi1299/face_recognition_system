@@ -5,7 +5,7 @@ from mark_attendance import mark_your_attendance
 
 app = Flask(__name__)
 app.secret_key = 'my secret key'      #Nothing important, type anything, just for flashing
-
+location="LIBRARY"
 
 @app.route('/')
 def home():
@@ -30,7 +30,7 @@ def registration_page():
 
 @app.route('/attendance_in', methods=['GET', 'POST'])
 def attendance_in():
-    marked = mark_your_attendance(0)
+    marked = mark_your_attendance(location)
     if(marked == True):
         flash("Attendence Marked Successfully")
     else:
@@ -38,15 +38,15 @@ def attendance_in():
 
     return render_template("index.html")
 
-@app.route('/attendance_out', methods=['GET', 'POST'])
-def attendance_out():
-    marked = mark_your_attendance(1)
-    if(marked == True):
-        flash("Attendence Marked Successfully")
-    else:
-        flash("You are not registered yet")
+# @app.route('/attendance_out', methods=['GET', 'POST'])
+# def attendance_out():
+#     marked = mark_your_attendance(1)
+#     if(marked == True):
+#         flash("Attendence Marked Successfully")
+#     else:
+#         flash("You are not registered yet")
 
-    return render_template("index.html")
+#     return render_template("index.html")
 
 
 if __name__ == '__main__':
