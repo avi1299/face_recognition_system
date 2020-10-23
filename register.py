@@ -77,6 +77,12 @@ def register_yourself(student_id):
     i = 0
     j = 0
 
+    frame = vs.read()
+    plot = plt.subplot(1,1,1)
+    plt.title("Detecting Face")
+    plt.axis('off')
+    im1 = plot.imshow(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
+
     while j < 10:   # Take 10 images
 
         i += 1
@@ -119,12 +125,14 @@ def register_yourself(student_id):
             # @params thickness of the rectangle
             frame = cv2.rectangle(frame,(x,y),(x+w,y+h),(0,255,0),1)
             
-            cv2.imshow("Image Captured",frame)
+            #cv2.imshow("Image Captured",frame)
             # Before continuing to the next loop, I want to give it a little pause
             # waitKey of 50 millisecond
-            cv2.waitKey(50)
+            #cv2.waitKey(50)
 
-
+        plt.ion()
+        im1.set_data(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
+        plt.pause(0.001)
         plt.show()
         if(i % 30 == 0):
             
@@ -146,15 +154,15 @@ def register_yourself(student_id):
 
     id_idx[student_id] = 10
 
-    vs.stop()
-    cv2.destroyAllWindows()
-
     with open( os.path.join(STORAGE_PATH, "id_idx.json"),"w") as outfile:
         json.dump(id_idx, outfile)
 
     #Exit time
     toc = time.time()
     print(toc - tic)
+
     plt.close()
+    vs.stop()
+    cv2.destroyAllWindows()
     return True
 # register_yourself()
