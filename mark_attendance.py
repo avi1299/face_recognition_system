@@ -10,7 +10,7 @@ import sqlite3
 
 def mark_your_attendance(location):
 
-    mpl.rcParams['toolbar'] = 'None'
+
     PROJECT_PATH = "/home/avinash/Desktop/Projects/face-recognition-attendance-system"
     STORAGE_PATH = PROJECT_PATH+"/storage"
 
@@ -25,21 +25,26 @@ def mark_your_attendance(location):
         known_face_encodings = []
         known_face_ids = []
 
+    if known_face_ids==[]:
+        return False
+
+    mpl.rcParams['toolbar'] = 'None'
+
 
     # CSV_PATH = "/home/harsh/Backup/face-recognition/data/attendance.csv"
-    CSV_PATH = PROJECT_PATH+"/static/data/attendance.csv"
+    #CSV_PATH = PROJECT_PATH+"/static/data/attendance.csv"
     DB_PATH = PROJECT_PATH+"/static/data/attendance.db"
 
 
-    if(os.path.exists(CSV_PATH)):
-        csv_file = open(CSV_PATH, "a+")
-        writer = csv.writer(csv_file)
+    # if(os.path.exists(CSV_PATH)):
+    #     csv_file = open(CSV_PATH, "a+")
+    #     writer = csv.writer(csv_file)
 
-    else:
-        os.mknod(CSV_PATH)
-        csv_file = open(CSV_PATH, "w+")
-        writer = csv.writer(csv_file)
-        writer.writerow(["Student ID", "Date", "Time of Entry"])
+    # else:
+    #     os.mknod(CSV_PATH)
+    #     csv_file = open(CSV_PATH, "w+")
+    #     writer = csv.writer(csv_file)
+    #     writer.writerow(["Student ID", "Date", "Time of Entry"])
 
     if(os.path.exists(DB_PATH)):
         conn = sqlite3.connect(DB_PATH)
@@ -178,11 +183,11 @@ def mark_your_attendance(location):
             # video_capture.release()
             # cv2.destroyAllWindows()
             sanity_count = 0
-            now = datetime.now()
-            dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
-            date = dt_string.split(" ")[0]
-            time = dt_string.split(" ")[1]
-            writer.writerow([name, date, time])
+            # now = datetime.now()
+            # dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+            # date = dt_string.split(" ")[0]
+            # time = dt_string.split(" ")[1]
+            # writer.writerow([name, date, time])
             # if(entry_or_exit==0):
             #     c.execute("INSERT INTO ATTENDANCE VALUES (?,datetime('now'),'IN');",(name, ))
             # else:

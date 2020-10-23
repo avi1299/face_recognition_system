@@ -1,6 +1,7 @@
 from flask import Flask, render_template, url_for, request, redirect, flash
 from register import register_yourself
 from mark_attendance import mark_your_attendance
+from deregister import deregister_yourself
 
 
 app = Flask(__name__)
@@ -12,7 +13,7 @@ def home():
     return render_template("index.html")
 
 
-@app.route('/', methods=['POST'])
+@app.route('/HAR', methods=['GET', 'POST'])
 def home_after_registration():
     id = request.form['Student_id']
     register_yourself(id)
@@ -23,6 +24,19 @@ def home_after_registration():
 @app.route('/registration', methods=['GET', 'POST'])
 def registration():
     return render_template("register.html")
+
+@app.route('/HAD', methods=['GET', 'POST'])
+def home_after_deregistration():
+    id = request.form['Student_id']
+    if(deregister_yourself(id)):
+        flash("Deregistration Successful")
+    else:
+        flash("ID not found for Deregistration")
+    return render_template("index.html")
+
+@app.route('/deregistration', methods=['GET', 'POST'])
+def deregistration():
+    return render_template("deregister.html")
 
 @app.route('/registration_page', methods=['GET', 'POST'])
 def registration_page():

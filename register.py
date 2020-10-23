@@ -51,16 +51,18 @@ def register_yourself(student_id):
     fa = FaceAligner(predictor, desiredFaceWidth = 96)
 
     print("[INFO] Initializing Video stream")
-    vs = VideoStream(0).start()
+    vs = VideoStream(src=0).start()
     #video_capture = cv2.VideoCapture(0)
     # student_id = input("Enter your id: ")
 
-    IMAGE_PATH = os.path.join(PATH, student_id)
+    #IMAGE_PATH = os.path.join(PATH, student_id)
 
-    try:
-        os.makedirs(IMAGE_PATH)
-    except:
-        pass
+    #UNcommnet below to create the foler for the images
+
+    # try:
+    #     os.makedirs(IMAGE_PATH)
+    # except:
+    #     pass
 
     try:
         start = id_idx[student_id]
@@ -124,8 +126,10 @@ def register_yourself(student_id):
         plt.show()
         if(i % 30 == 0):
             
-            # So now we captured a face, we need to write it in a file
-            cv2.imwrite(IMAGE_PATH + "/{}_".format(student_id) + str(j) + ".jpg", face_aligned)
+            # Uncommnet the line below to store the face files
+
+            #cv2.imwrite(IMAGE_PATH + "/{}_".format(student_id) + str(j) + ".jpg", face_aligned)
+
             try:
                 known_face_encodings.append(face_recognition.face_encodings(frame)[0])
                 known_face_ids.append(student_id)
