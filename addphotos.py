@@ -13,7 +13,7 @@ from imutils.video import VideoStream
 from imutils.face_utils import rect_to_bb
 from imutils.face_utils import FaceAligner
 
-def register_yourself(student_id):
+def add_photos(student_id):
 
     #PROJECT_PATH = "D:/Acads/Projects/Identity Detection/face_recognition_system"
     PROJECT_PATH = "/home/avinash/Desktop/Projects/face-recognition-attendance-system"
@@ -42,7 +42,7 @@ def register_yourself(student_id):
     except:
         id_idx = {}
 
-    if(student_id in id_idx.keys()):
+    if(student_id not in id_idx.keys()):
         return False
 
     mpl.rcParams['toolbar'] = 'None'
@@ -66,10 +66,10 @@ def register_yourself(student_id):
     # except:
     #     pass
 
-    #try:
-    #    start = id_idx[student_id]
-    #except :
-    #    start = 0
+    try:
+        start = id_idx[student_id]
+    except :
+        start = 0
 
     #Entry time
     tic = time.time()
@@ -144,7 +144,7 @@ def register_yourself(student_id):
     with open( os.path.join(STORAGE_PATH, "known_face_encodings.pickle"),"wb") as fp:
         pickle.dump(known_face_encodings,fp)
 
-    id_idx[student_id] = 10
+    id_idx[student_id] = start + 10
 
     vs.stop()
     cv2.destroyAllWindows()

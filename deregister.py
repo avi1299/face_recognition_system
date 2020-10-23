@@ -43,7 +43,7 @@ def deregister_yourself(student_id):
             new_face_encoding.append(known_face_encodings[index])
     known_face_ids=new_face_id
     known_face_encodings=new_face_encoding
-    print(known_face_ids)
+    #print(known_face_ids)
 
     with open( os.path.join(STORAGE_PATH, "known_face_ids.pickle"),"wb") as fp:
         pickle.dump(known_face_ids,fp)
