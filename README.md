@@ -1,10 +1,6 @@
-# Face Recognition Attendance System
+# Face Recognition Surveillance System
 
-## Introduction
-
-Face recognition is one of the most important biometric recognition techniques. It is relatively simple to set up and covers an extensive range of applications varying from surveillance to digital marketing.
-
-## Objective
+## Project Objective
 
 - To design a real-time face recognition system that identifies people across the **BITS Pilani, Pilani campus**. Live video footage is provided as an input through the **100+** CCTV cameras installed at various vital locations across the campus. 
 - To design a **web portal** that can allow registration of users with the option to add more photos. 
@@ -15,16 +11,18 @@ Face recognition is one of the most important biometric recognition techniques. 
 
 OS Requirement :- Ubuntu 
 
-To run the model, first clone the repository
+To run the model, first clone the repository by typing the command in git bash.
 ```
 git clone https://github.com/avi1299/face_recognition_system.git
 
 ```
+Alternatively, you can download the code as .zip and extract the file.
+
 
 Shift to the cloned directory
 
 ```
-cd face-recognition-attendance-system
+cd face_recognition_system
 ```
 
 To install the requirements, run the following command:
