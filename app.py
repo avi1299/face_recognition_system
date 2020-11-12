@@ -1,9 +1,6 @@
 from flask import Flask, render_template, url_for, request, redirect, flash
-from register import register_yourself
-from mark_attendance import mark_your_attendance
-from deregister import deregister_yourself
-from addphotos import add_photos
-
+from modules.register import register_yourself, deregister_yourself, add_photos
+from modules.mark_attendance import mark_your_attendance
 
 app = Flask(__name__)
 app.secret_key = 'my secret key'      #Nothing important, type anything, just for flashing
