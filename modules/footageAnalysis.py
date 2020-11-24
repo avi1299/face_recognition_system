@@ -2,13 +2,15 @@ from imutils.video import FileVideoStream
 #from imutils.video import FPS
 import imutils
 from threading import Thread
-import sys, time, os
+import sys, time, os, pickle
 from queue import Queue
 import dlib
 import cv2
 from imutils.face_utils import rect_to_bb , FaceAligner
 from modules.imageEnhancement import adjust_gamma
-from modules.config import FOOTAGES_PATH, LANDMARK_PATH, DB_PATH
+from modules.config import FOOTAGES_PATH, LANDMARK_PATH, STORAGE_PATH
+import face_recognition.api as face_recognition
+import numpy as np
 
 def analyseFootage(clipname):
     CLIP_PATH = FOOTAGES_PATH + "/" + clipname
@@ -16,6 +18,17 @@ def analyseFootage(clipname):
     if(os.path.isfile(CLIP_PATH) == False):
         return 0
 
+    #Load the known face IDs and encodings for facial recognition
+    try:
+        with open( os.path.join(STORAGE_PATH, "known_face_ids.pickle"),"rb") as fp:
+            known_face_ids = pickle.load(fp)
+        with open( os.path.join(STORAGE_PATH, "known_face_encodings.pickle"),"rb") as fp:
+            known_face_encodings = pickle.load(fp)
+    except:
+        known_face_encodings = []
+        known_face_ids = []
+
+    #Start the Video Stream
     fvs = FileVideoStream(CLIP_PATH).start()
     time.sleep(1.0)
 
@@ -24,6 +37,15 @@ def analyseFootage(clipname):
     predictor = dlib.shape_predictor(LANDMARK_PATH)  
     fa = FaceAligner(predictor, desiredFaceWidth = 96)
     
+    name = "Unknown"
+    face_locations = []
+    face_encodings = []
+    face_names = []
+    process_this_frame = True
+    sanity_count = 0
+    unknown_count = 0
+    marked = True
+
     print("[INFO] Initializing CCTV Footage")
     while fvs.more():
     # grab the frame from the threaded video file stream, resize
@@ -56,27 +78,80 @@ def analyseFootage(clipname):
             h = face.bottom() - y
             
             face_aligned = fa.align(frame,gray_frame,face)
-            # Whenever the program captures the face, we will write that is a folder
-            # Before capturing the face, we need to tell the script whose face it is
-            # For that we will need an identifier, here we call it id
-            # So now we captured a face, we need to write it in a file
-            
+            face_aligned = imutils.resize(face_aligned ,width = 600)
+
+            if process_this_frame:
+                # Find all the faces and face encodings in the current frame of video
+                face_locations = face_recognition.face_locations(frame)
+                face_encodings = face_recognition.face_encodings(frame, face_locations)
+
+                face_names = []
+                for face_encoding in face_encodings:
+                    # See if the face is a match for the known face(s)
+                    matches = face_recognition.compare_faces(known_face_encodings, face_encoding, tolerance = 0.35)
+                    name = "Unknown"
+
+                    # # If a match was found in known_face_encodings, just use the first one.
+                    # if True in matches:
+                    #     first_match_index = matches.index(True)
+                    #     name = known_face_ids[first_match_index]
+
+                    # Or instead, use the known face with the smallest distance to the new face
+                    face_distances = face_recognition.face_distance(known_face_encodings, face_encoding)
+                    # print(face_distances)
+                    try:
+                        best_match_index = np.argmin(face_distances)
+                        if matches[best_match_index]:
+                            name = known_face_ids[best_match_index]
+                    except:
+                        # print("No students have been marked")
+                        #video_capture.release()
+                        #cv2.destroyAllWindows()
+
+                        marked = False
+                        #return marked
+                    #if matches[best_match_index]:
+                    #    name = known_face_ids[best_match_index]
+
+                    face_names.append(name)
+
+            if(name == "Unknown"):
+                unknown_count += 1
+            else:
+                unknown_count = 0
+
+            if(unknown_count == 600):
+                # video_capture.release()
+                # cv2.destroyAllWindows()
+                # print("You haven't been registered")
+                marked = False
+                unknown_count = 0
+                break
+
+            process_this_frame = not process_this_frame
+
+            for (top, right, bottom, left), name in zip(face_locations, face_names):
+
+                # Draw a box around the face
+                cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 1)
+
+                # Draw a label with a name below the face
+                cv2.rectangle(frame, (left, bottom + 15), (right, bottom), (0, 0, 255), cv2.FILLED)
+                font = cv2.FONT_HERSHEY_DUPLEX
+                cv2.putText(frame, name, (left + 6, bottom + 15), font, 0.4, (255, 255, 255), 1)
+
             # Saving the image dataset, but only the face part, cropping the rest
 
             if face is None:
                 print("face is none")
                 continue
-
-
-            face_aligned = imutils.resize(face_aligned ,width = 600)
-            
-            #cv2.imshow("Image Captured",face_aligned)
             
             # @params the initial point of the rectangle will be x,y and
             # @params end point will be x+width and y+height
             # @params along with color of the rectangle
             # @params thickness of the rectangle
-            frame = cv2.rectangle(frame,(x,y),(x+w,y+h),(0,255,0),1)
+            #frame = cv2.rectangle(frame,(x,y),(x+w,y+h),(0,255,0),1)
+
             # Before continuing to the next loop, I want to give it a little pause
             # waitKey of 100 millisecond
             cv2.waitKey(1)
