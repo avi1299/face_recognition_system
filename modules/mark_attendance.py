@@ -6,21 +6,15 @@ from datetime import datetime
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 import sqlite3
-
+from modules.config import PROJECT_PATH, STORAGE_PATH, DB_PATH
 
 def mark_your_attendance(location):
-
-
-    PROJECT_PATH = "/home/avinash/Desktop/Projects/face-recognition-attendance-system"
-    STORAGE_PATH = PROJECT_PATH+"/storage"
 
     try:
         with open( os.path.join(STORAGE_PATH, "known_face_ids.pickle"),"rb") as fp:
             known_face_ids = pickle.load(fp)
         with open( os.path.join(STORAGE_PATH, "known_face_encodings.pickle"),"rb") as fp:
             known_face_encodings = pickle.load(fp)
-        # known_face_ids = np.load("known_face_ids.npy")
-        # known_face_encodings = np.load("known_face_encodings.npy")
     except:
         known_face_encodings = []
         known_face_ids = []
@@ -29,11 +23,6 @@ def mark_your_attendance(location):
         return False
 
     mpl.rcParams['toolbar'] = 'None'
-
-
-    # CSV_PATH = "/home/harsh/Backup/face-recognition/data/attendance.csv"
-    #CSV_PATH = PROJECT_PATH+"/static/data/attendance.csv"
-    DB_PATH = PROJECT_PATH+"/static/data/attendance.db"
 
 
     # if(os.path.exists(CSV_PATH)):

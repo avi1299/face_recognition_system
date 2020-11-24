@@ -12,12 +12,12 @@ from imutils import face_utils
 from imutils.video import VideoStream
 from imutils.face_utils import rect_to_bb
 from imutils.face_utils import FaceAligner
-from modules.config import PATH,PROJECT_PATH,LANDMARK_PATH,STORAGE_PATH
+from modules.config import DATA_PATH,PROJECT_PATH,LANDMARK_PATH,STORAGE_PATH
 
 def register_yourself(student_id):
 
     try:
-        os.makedirs(PATH)
+        os.makedirs(DATA_PATH)
     except:
         pass
 
@@ -26,8 +26,6 @@ def register_yourself(student_id):
             known_face_ids = pickle.load(fp)
         with open( os.path.join(STORAGE_PATH, "known_face_encodings.pickle"),"rb") as fp:
             known_face_encodings = pickle.load(fp)
-        # known_face_ids = np.load("known_face_ids.npy")
-        # known_face_encodings = np.load("known_face_encodings.npy")
     except:
         known_face_encodings = []
         known_face_ids = []
@@ -43,6 +41,7 @@ def register_yourself(student_id):
 
     mpl.rcParams['toolbar'] = 'None'
     
+    print("[INFO] Loading Face Detector")
     detector = dlib.get_frontal_face_detector()
     predictor = dlib.shape_predictor(LANDMARK_PATH)  
     fa = FaceAligner(predictor, desiredFaceWidth = 96)
@@ -53,13 +52,14 @@ def register_yourself(student_id):
     #Below is the OpenCV implementation for capturing from webcam
     #video_capture = cv2.VideoCapture(0)
     
-    #UNcommnet below to create the foler for the images
-
-    #IMAGE_PATH = os.path.join(PATH, student_id)
-    # try:
-    #     os.makedirs(IMAGE_PATH)
-    # except:
-    #     pass
+    #Uncommnet below to create the foler for the images
+    '''
+    IMAGE_PATH = os.path.join(DATA_PATH, student_id)
+    try:
+        os.makedirs(IMAGE_PATH)
+    except:
+        pass
+    '''
 
     #Entry time
     tic = time.time()
@@ -95,8 +95,6 @@ def register_yourself(student_id):
             print("inside for loop")
             
             (x,y,w,h) = face_utils.rect_to_bb(face)
-
-
             face_aligned = fa.align(frame,gray_frame,face)
             # Whenever the program captures the face, we will write that is a folder
             # Before capturing the face, we need to tell the script whose face it is
@@ -127,8 +125,7 @@ def register_yourself(student_id):
         plt.show()
         if(i % 30 == 0):
             
-            # Uncommnet the line below to store the face files
-
+            # Uncommnet the line below to store the face images
             #cv2.imwrite(IMAGE_PATH + "/{}_".format(student_id) + str(j) + ".jpg", face_aligned)
 
             try:
@@ -160,7 +157,7 @@ def register_yourself(student_id):
 def add_photos(student_id):
 
     try:
-        os.makedirs(PATH)
+        os.makedirs(DATA_PATH)
     except:
         pass
 
@@ -169,8 +166,7 @@ def add_photos(student_id):
             known_face_ids = pickle.load(fp)
         with open( os.path.join(STORAGE_PATH, "known_face_encodings.pickle"),"rb") as fp:
             known_face_encodings = pickle.load(fp)
-        # known_face_ids = np.load("known_face_ids.npy")
-        # known_face_encodings = np.load("known_face_encodings.npy")
+
     except:
         known_face_encodings = []
         known_face_ids = []
@@ -186,6 +182,7 @@ def add_photos(student_id):
 
     mpl.rcParams['toolbar'] = 'None'
     
+    print("[INFO] Loading Face Detector")
     detector = dlib.get_frontal_face_detector()
     predictor = dlib.shape_predictor(LANDMARK_PATH)  
     fa = FaceAligner(predictor, desiredFaceWidth = 96)
@@ -196,14 +193,14 @@ def add_photos(student_id):
     #OpenCV implementation 
     #video_capture = cv2.VideoCapture(0)
 
-    #UNcommnet below to create the foler for the images
-
-    #IMAGE_PATH = os.path.join(PATH, student_id)
-    # try:
-    #     os.makedirs(IMAGE_PATH)
-    # except:
-    #     pass
-
+    #Uncommnet below to create the foler for the images
+    '''
+    IMAGE_PATH = os.path.join(DATA_PATH, student_id)
+    try:
+        os.makedirs(IMAGE_PATH)
+    except:
+        pass
+    '''
     try:
         start = id_idx[student_id]
     except :
@@ -299,7 +296,6 @@ def add_photos(student_id):
     toc = time.time()
     print(toc - tic)
 
-
     plt.close()
     vs.stop()
     cv2.destroyAllWindows()
@@ -307,9 +303,8 @@ def add_photos(student_id):
 
 def deregister_yourself(student_id):
     #print("Inside deregister yourself")
-    
     try:
-        os.makedirs(PATH)
+        os.makedirs(DATA_PATH)
     except:
         pass
 
@@ -318,8 +313,7 @@ def deregister_yourself(student_id):
             known_face_ids = pickle.load(fp)
         with open( os.path.join(STORAGE_PATH, "known_face_encodings.pickle"),"rb") as fp:
             known_face_encodings = pickle.load(fp)
-        # known_face_ids = np.load("known_face_ids.npy")
-        # known_face_encodings = np.load("known_face_encodings.npy")
+
     except:
         known_face_encodings = []
         known_face_ids = []
