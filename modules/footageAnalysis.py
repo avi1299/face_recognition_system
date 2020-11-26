@@ -34,15 +34,15 @@ def analyseFootage(clipname):
 
     print("[INFO] Loading the facial detector")
     detector = dlib.get_frontal_face_detector()
-    predictor = dlib.shape_predictor(LANDMARK_PATH)  
-    fa = FaceAligner(predictor, desiredFaceWidth = 96)
+    #predictor = dlib.shape_predictor(LANDMARK_PATH)  
+    #fa = FaceAligner(predictor, desiredFaceWidth = 96)
     
     name = "Unknown"
     face_locations = []
     face_encodings = []
     face_names = []
     process_this_frame = True
-    sanity_count = 0
+    #sanity_count = 0
     unknown_count = 0
     marked = True
 
@@ -56,7 +56,7 @@ def analyseFootage(clipname):
         if(frame is None):
             break
         
-        #frame = imutils.resize(frame ,width = 1000)
+        frame = imutils.resize(frame ,width = 1200)
 
         frame =adjust_gamma(frame,gamma = 1.7)
         gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -71,14 +71,13 @@ def analyseFootage(clipname):
         for face in faces:
             #num_frames = num_frames + 1
             #print("inside for loop")
-        
-            x = face.left()
-            y = face.top()
-            w = face.right() - x
-            h = face.bottom() - y
-            
-            face_aligned = fa.align(frame,gray_frame,face)
-            face_aligned = imutils.resize(face_aligned ,width = 600)
+
+            if face is None:
+                print("face is none")
+                continue
+    
+            #face_aligned = fa.align(frame,gray_frame,face)
+            #face_aligned = imutils.resize(face_aligned ,width = 600)
 
             if process_this_frame:
                 # Find all the faces and face encodings in the current frame of video
@@ -140,28 +139,16 @@ def analyseFootage(clipname):
                 font = cv2.FONT_HERSHEY_DUPLEX
                 cv2.putText(frame, name, (left + 6, bottom + 15), font, 0.4, (255, 255, 255), 1)
 
-            # Saving the image dataset, but only the face part, cropping the rest
-
-            if face is None:
-                print("face is none")
-                continue
-            
-            # @params the initial point of the rectangle will be x,y and
-            # @params end point will be x+width and y+height
-            # @params along with color of the rectangle
-            # @params thickness of the rectangle
-            #frame = cv2.rectangle(frame,(x,y),(x+w,y+h),(0,255,0),1)
-
-            # Before continuing to the next loop, I want to give it a little pause
-            # waitKey of 100 millisecond
-            cv2.waitKey(1)
 
         #Showing the image in another window
         #Creates a window with window name "Face" and with the image img
-        cv2.imshow("Video feed",frame)
-        
-        cv2.waitKey(1)
-        
+        cv2.imshow("Video feed (PRESS Q TO QUIT",frame)
+        #cv2.imencode('.jpg', frame)[1].tobytes()
+        #yield (b'--frame\r\n'
+        #       b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+
+        if(cv2.waitKey(1) == ord("q")):
+            break
         #frame = imutils.resize(frame, width=450)
         #frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         #frame = np.dstack([frame, frame, frame])

@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 import sqlite3
 from modules.config import PROJECT_PATH, STORAGE_PATH, DB_PATH
+from modules import imageEnhancement
 
 def mark_your_attendance(location):
 
@@ -58,17 +59,21 @@ def mark_your_attendance(location):
     unknown_count = 0
     marked = True
 
-    video_capture = cv2.VideoCapture(0)
+    video_capture = cv2.VideoCapture(0,cv2.CAP_DSHOW)
     #ret, frame = video_capture.read()
-    _,frame = video_capture.read()
-    plot = plt.subplot(1,1,1)
-    plt.title("Detecting Face")
-    plt.axis('off')
-    im1 = plot.imshow(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
+    #_,frame = video_capture.read()
+    #plot = plt.subplot(1,1,1)
+    #plt.title("Detecting Face")
+    #plt.axis('off')
+    #im1 = plot.imshow(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
 
     while True:
         # Grab a single frame of video
         _,frame = video_capture.read()
+
+        #Applying face enhancement steps
+        frame =imageEnhancement.adjust_gamma(frame,gamma = 1.5)
+
         # print("FRAME READ WORKS")
         # Resize frame of video to 1/4 size for faster face recognition processing
         small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
@@ -144,15 +149,15 @@ def mark_your_attendance(location):
 
         # print("BEFORE sHOWING")
         # Display the resulting image
-        # cv2.imshow('Video', frame)
-        # if cv2.waitKey(20) == 27:
-        #     break
+        cv2.imshow('Video', frame)
+        if cv2.waitKey(20) == ord("q"):
+             break
 
-        plt.ion()
-        im1.set_data(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
-        plt.pause(0.001)
+        #plt.ion()
+        #im1.set_data(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
+        #plt.pause(0.001)
         # as opencv loads in BGR format by default, we want to show it in RGB.
-        plt.show()
+        #plt.show()
 
         # print("AFTER SHOWING")
         # Hit 'q' on the keyboard to quit!
@@ -189,7 +194,7 @@ def mark_your_attendance(location):
 
     # Release handle to the webcam
 
-    plt.close()
+    #plt.close()
     video_capture.release()
     cv2.destroyAllWindows()
     conn.close()

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, request, redirect, flash
+from flask import Flask, render_template, url_for, request, redirect, flash, Response
 from modules.register import register_yourself, deregister_yourself, add_photos
 from modules.mark_attendance import mark_your_attendance
 from modules.footageAnalysis import analyseFootage
@@ -80,6 +80,7 @@ def home_after_analysis():
         flash("File does not exist. Check name again")   
 
     return render_template("index.html")
+
 
 if __name__ == '__main__':
     app.run(debug = True)

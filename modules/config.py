@@ -1,4 +1,4 @@
-PROJECT_PATH = "D:/Acads/Projects/Identity Detection/face_recognition_system"
+PROJECT_PATH = "D:/Acads/Projects/IdentityDetection/face_recognition_system"
 #PROJECT_PATH = "/home/avinash/Desktop/Projects/face-recognition-attendance-system"
 DATA_PATH = PROJECT_PATH+"/static/data"
 STORAGE_PATH = PROJECT_PATH+"/storage"
