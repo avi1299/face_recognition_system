@@ -58,7 +58,7 @@ def analyseFootage(clipname):
         
         frame = imutils.resize(frame ,width = 1200)
 
-        frame =adjust_gamma(frame,gamma = 1.7)
+        frame =adjust_gamma(frame,gamma = 1.5)
         gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         
         #To store the faces

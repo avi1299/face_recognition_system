@@ -31,7 +31,9 @@ To install the requirements, run the following command:
 pip install -r requirements.txt
 ```
 
-TO launch the application, run the following command: 
+Go to modules/config.py and set your `PROJECT_PATH`
+
+To launch the application, run the following command: 
 
 ```
 python3 app.py
