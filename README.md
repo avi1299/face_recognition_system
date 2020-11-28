@@ -49,6 +49,7 @@ Additionally one can `Add photos` or `Delete Registration` from the Registration
 
 The system offers an use-case of analyzing stored footages. To analyze a footage, it should be stored in the `storage/footage` directory. Next go to the `footage analysis` section and enter the full name (with extension) of the clip. The system will run its algorithm on the footage and store relevant entries into the database. 
 
+You can watch the [demo video here](https://drive.google.com/file/d/1H8JPD-QQFenn6lgoRUsNRNceKmF0tpx2/view?usp=sharing)
 ## Algorithm
 
 Our algorithm is divided into three main parts:
