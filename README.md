@@ -9,14 +9,14 @@
 
 ## Instructions to run
 
-OS Requirement :- Ubuntu 
+Optionally, create a virtual environment on your system and open it. 
 
-To run the model, first clone the repository by typing the command in git bash.
+To run the application, first clone the repository by typing the command in git bash.
 ```
 git clone https://github.com/avi1299/face_recognition_system.git
 
 ```
-Alternatively, you can download the code as .zip and extract the file.
+Alternatively, you can download the code as .zip and extract the files.
 
 
 Shift to the cloned directory
@@ -45,6 +45,7 @@ Mark your attendance by clicking on `Mark Attendance` button on the home page.
 
 Additionally one can `Add photos` or `Delete Registration` from the Registration page.
 
+The system offers an use-case of analyzing stored footages. To analyze a footage, it should be stored in the `storage/footage` directory. Next go to the `footage analysis` section and enter the full name (with extension) of the clip. The system will run its algorithm on the footage and store relevant entries into the database. 
 
 ## Algorithm
 
