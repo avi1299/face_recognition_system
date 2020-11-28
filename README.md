@@ -114,5 +114,5 @@ The possible reasons for the errors could be:
 
 1. Avinash Sontakke [Profile](https://github.com/avi1299)
 2. Shrey Shah [Profile](https://github.com/imshreyshah)
-1. Vishal Mittal [Profile](https://github.com/vismit2000)
-2. Harsh Sulakhe [Profile](https://github.com/HarshSulakhe)
+3. Vishal Mittal [Profile](https://github.com/vismit2000)
+4. Harsh Sulakhe [Profile](https://github.com/HarshSulakhe)
