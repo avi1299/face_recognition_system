@@ -5,9 +5,9 @@ import face_recognition.api as face_recognition
 from cv2 import cv2
 import numpy as np
 import matplotlib as mpl
-import sqlite3
-from face_recognition_system.modules.config import STORAGE_PATH, DB_PATH
-from face_recognition_system.modules import imageEnhancement
+#import sqlite3
+from modules.config import STORAGE_PATH, DB_PATH
+from modules import imageEnhancement
 
 def mark_your_attendance(location):
 

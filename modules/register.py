@@ -7,11 +7,11 @@ import numpy as np
 import json
 #import matplotlib.pyplot as plt
 import matplotlib as mpl
-from face_recognition_system.modules import imageEnhancement
 import dlib
 from imutils.face_utils import rect_to_bb
 from imutils.face_utils import FaceAligner
-from face_recognition_system.modules.config import DATA_PATH,PROJECT_PATH,LANDMARK_PATH,STORAGE_PATH
+from modules import imageEnhancement
+from modules.config import DATA_PATH,LANDMARK_PATH,STORAGE_PATH
 
 def register_yourself(student_id):
 

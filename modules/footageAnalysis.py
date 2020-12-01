@@ -10,8 +10,8 @@ import face_recognition.api as face_recognition
 import numpy as np
 
 #from imutils.face_utils import rect_to_bb , FaceAligner
-from face_recognition_system.modules.imageEnhancement import adjust_gamma
-from face_recognition_system.modules.config import FOOTAGES_PATH, STORAGE_PATH
+from modules.imageEnhancement import adjust_gamma
+from modules.config import FOOTAGES_PATH, STORAGE_PATH
 
 def analyseFootage(clipname):
     CLIP_PATH = FOOTAGES_PATH + "/" + clipname
