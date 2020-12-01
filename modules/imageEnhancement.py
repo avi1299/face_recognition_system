@@ -1,3 +1,5 @@
+# pylint: disable-all
+
 #Importing necessary libraries
 import cv2
 import numpy as np

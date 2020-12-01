@@ -1,13 +1,13 @@
+# pylint: disable-all
+
+import pickle, os
 import face_recognition.api as face_recognition
-import pickle, os, csv, stat
 from cv2 import cv2
 import numpy as np
-from datetime import datetime
-import matplotlib.pyplot as plt
 import matplotlib as mpl
 import sqlite3
-from modules.config import PROJECT_PATH, STORAGE_PATH, DB_PATH
-from modules import imageEnhancement
+from face_recognition_system.modules.config import STORAGE_PATH, DB_PATH
+from face_recognition_system.modules import imageEnhancement
 
 def mark_your_attendance(location):
 
@@ -72,7 +72,7 @@ def mark_your_attendance(location):
         _,frame = video_capture.read()
 
         #Applying face enhancement steps
-        #frame =imageEnhancement.adjust_gamma(frame,gamma = 1.5)
+        frame =imageEnhancement.adjust_gamma(frame,gamma = 1.5)
 
         # print("FRAME READ WORKS")
         # Resize frame of video to 1/4 size for faster face recognition processing
@@ -114,12 +114,12 @@ def mark_your_attendance(location):
 
                 face_names.append(name)
 
-        if(name == "Unknown"):
+        if name == "Unknown" :
             unknown_count += 1
         else:
             unknown_count = 0
 
-        if(unknown_count == 600):
+        if unknown_count == 600 :
             # video_capture.release()
             # cv2.destroyAllWindows()
             # print("You haven't been registered")
@@ -151,7 +151,7 @@ def mark_your_attendance(location):
         # Display the resulting image
         cv2.imshow('Video', frame)
         if cv2.waitKey(20) == ord("q"):
-             break
+            break
 
         #plt.ion()
         #im1.set_data(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
@@ -165,14 +165,14 @@ def mark_your_attendance(location):
             prev_name = name
             sanity_count += 1
 
-        elif(sanity_count < 60):
+        elif sanity_count < 60 :
             if(prev_name == name and name != "Unknown"):
                 sanity_count += 1
                 prev_name = name
             else:
                 sanity_count = 0
 
-        elif(sanity_count == 60):
+        elif sanity_count == 60 :
             # print("Face registered")
             # video_capture.release()
             # cv2.destroyAllWindows()

@@ -1,3 +1,5 @@
+# pylint: disable-all
+
 import face_recognition.api as face_recognition
 import os, time, pickle
 from cv2 import cv2
@@ -5,11 +7,11 @@ import numpy as np
 import json
 #import matplotlib.pyplot as plt
 import matplotlib as mpl
-from modules import imageEnhancement
+from face_recognition_system.modules import imageEnhancement
 import dlib
 from imutils.face_utils import rect_to_bb
 from imutils.face_utils import FaceAligner
-from modules.config import DATA_PATH,PROJECT_PATH,LANDMARK_PATH,STORAGE_PATH
+from face_recognition_system.modules.config import DATA_PATH,PROJECT_PATH,LANDMARK_PATH,STORAGE_PATH
 
 def register_yourself(student_id):
 

@@ -1,21 +1,22 @@
+# pylint: disable-all
+
+import time, os, pickle
 from imutils.video import FileVideoStream
 #from imutils.video import FPS
 import imutils
-from threading import Thread
-import sys, time, os, pickle
-from queue import Queue
 import dlib
 import cv2
-from imutils.face_utils import rect_to_bb , FaceAligner
-from modules.imageEnhancement import adjust_gamma
-from modules.config import FOOTAGES_PATH, LANDMARK_PATH, STORAGE_PATH
 import face_recognition.api as face_recognition
 import numpy as np
+
+#from imutils.face_utils import rect_to_bb , FaceAligner
+from face_recognition_system.modules.imageEnhancement import adjust_gamma
+from face_recognition_system.modules.config import FOOTAGES_PATH, STORAGE_PATH
 
 def analyseFootage(clipname):
     CLIP_PATH = FOOTAGES_PATH + "/" + clipname
 
-    if(os.path.isfile(CLIP_PATH) == False):
+    if os.path.isfile(CLIP_PATH) == False :
         return 0
 
     #Load the known face IDs and encodings for facial recognition
@@ -34,9 +35,8 @@ def analyseFootage(clipname):
 
     print("[INFO] Loading the facial detector")
     detector = dlib.get_frontal_face_detector()
-    #predictor = dlib.shape_predictor(LANDMARK_PATH)  
-    #fa = FaceAligner(predictor, desiredFaceWidth = 96)
-    
+    #predictor = dlib.shape_predictor(LANDMARK_PATH)
+    #fa = FaceAligner(predictor, desiredFaceWidth = 96)  
     name = "Unknown"
     face_locations = []
     face_encodings = []
@@ -52,8 +52,8 @@ def analyseFootage(clipname):
     # it, and convert it to grayscale (while still retaining 3
     # channels)
         frame = fvs.read()
-        
-        if(frame is None):
+
+        if frame is None :
             break
         
         frame = imutils.resize(frame ,width = 1200)
@@ -114,12 +114,12 @@ def analyseFootage(clipname):
 
                     face_names.append(name)
 
-            if(name == "Unknown"):
+            if name == "Unknown" :
                 unknown_count += 1
             else:
                 unknown_count = 0
 
-            if(unknown_count == 600):
+            if unknown_count == 600 :
                 # video_capture.release()
                 # cv2.destroyAllWindows()
                 # print("You haven't been registered")
@@ -147,7 +147,7 @@ def analyseFootage(clipname):
         #yield (b'--frame\r\n'
         #       b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
-        if(cv2.waitKey(1) == ord("q")):
+        if cv2.waitKey(1) == ord("q") :
             break
         #frame = imutils.resize(frame, width=450)
         #frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)

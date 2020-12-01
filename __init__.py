@@ -1,3 +1,5 @@
+# pylint: disable-all
+
 from flask import Flask, render_template, url_for, request, redirect, flash, Response
 from face_recognition_system.modules.register import register_yourself, deregister_yourself, add_photos
 from face_recognition_system.modules.mark_attendance import mark_your_attendance
