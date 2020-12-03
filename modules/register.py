@@ -49,7 +49,7 @@ def register_yourself(student_id):
     fa = FaceAligner(predictor, desiredFaceWidth = 96)
 
     print("[INFO] Initializing Video stream")
-    vs = cv2.VideoCapture(0,cv2.CAP_DSHOW)
+    vs = cv2.VideoCapture(0)#,cv2.CAP_DSHOW)
     
     #Uncommnet below to create the folder for the images
     '''
@@ -192,7 +192,7 @@ def add_photos(student_id):
     fa = FaceAligner(predictor, desiredFaceWidth = 96)
 
     print("[INFO] Initializing Video stream")
-    vs = cv2.VideoCapture(0,cv2.CAP_DSHOW)
+    vs = cv2.VideoCapture(0)#,cv2.CAP_DSHOW)
 
     #Uncommnet below to create the foler for the images
     '''

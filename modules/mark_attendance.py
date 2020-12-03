@@ -6,6 +6,7 @@ from cv2 import cv2
 import numpy as np
 import matplotlib as mpl
 #import sqlite3
+import psycopg2
 from modules.config import STORAGE_PATH, DB_PATH
 from modules import imageEnhancement
 
@@ -37,7 +38,11 @@ def mark_your_attendance(location):
     #     writer.writerow(["Student ID", "Date", "Time of Entry"])
 
     if(os.path.exists(DB_PATH)):
-        conn = sqlite3.connect(DB_PATH)
+        #rdbms='sqlite'
+        #conn = psycopg2.connect(DB_PATH)
+        #c=conn.cursor()
+        rdbms='postgresql'
+        conn = psycopg2.connect(host="localhost",database="face_rec_db",user="postgres",password="atmanirbhar")
         c=conn.cursor()
 
     else:
@@ -59,7 +64,10 @@ def mark_your_attendance(location):
     unknown_count = 0
     marked = True
 
-    video_capture = cv2.VideoCapture(0,cv2.CAP_DSHOW)
+    video_capture = cv2.VideoCapture(0)#,cv2.CAP_DSHOW)
+    #video_capture.open()
+    #print(video_capture.isOpened())
+    #print("Video Capture set")
     #ret, frame = video_capture.read()
     #_,frame = video_capture.read()
     #plot = plt.subplot(1,1,1)
@@ -70,7 +78,7 @@ def mark_your_attendance(location):
     while True:
         # Grab a single frame of video
         _,frame = video_capture.read()
-
+        #print("Returned value: ",ret)
         #Applying face enhancement steps
         frame =imageEnhancement.adjust_gamma(frame,gamma = 1.5)
 
@@ -186,7 +194,10 @@ def mark_your_attendance(location):
             #     c.execute("INSERT INTO ATTENDANCE VALUES (?,datetime('now'),'IN');",(name, ))
             # else:
             #     c.execute("INSERT INTO ATTENDANCE VALUES (?,datetime('now'),'OUT');",(name, ))
-            c.execute("INSERT INTO ATTENDANCE VALUES (?,datetime('now'),?);",(name, location, ))
+            if (rdbms=='sqlite'):
+                c.execute("INSERT INTO ATTENDANCE VALUES (?,datetime('now'),?);",(name, location, ))
+            elif (rdbms=='postgresql'):
+                c.execute("INSERT INTO attendance VALUES (%s,now(),%s);",(name, location))
             conn.commit()
 
             # print(name + date + time)
