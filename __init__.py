@@ -10,7 +10,7 @@ app = Flask(__name__)
 app.secret_key = 'my secret key'      #Nothing important, type anything, just for flashing
 location="LIBRARY"
 
-@app.route('/')
+@app.route('/',methods=['GET', 'POST'])
 def render_homepage():
     return render_template("index.html")
 
@@ -85,13 +85,18 @@ def render_footage_analysis():
 
 @app.route('/HAFA', methods=['GET', 'POST'])
 def home_after_analysis():
-    clipname = request.form['Clip_name']
-    if(analyseFootage(clipname)):
-        flash("Analysis done and entries are stored in the database")
-    else:
-        flash("File does not exist. Check name again")   
+    global clipname 
+    clipname= request.form['Clip_name']
+    #if(analyseFootage(clipname)):
+    #    flash("Analysis done and entries are stored in the database")
+    #else:
+    #    flash("File does not exist. Check name again")   
 
-    return render_template("index.html")
+    return render_template("videofeed.html")
+
+@app.route('/footage_feed')
+def footage_feed():
+    return Response(analyseFootage(clipname), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
 if __name__ == '__main__':

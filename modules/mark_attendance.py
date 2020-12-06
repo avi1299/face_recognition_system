@@ -64,16 +64,8 @@ def mark_your_attendance(location):
     unknown_count = 0
     marked = True
 
-    video_capture = cv2.VideoCapture(0)#,cv2.CAP_DSHOW)
-    #video_capture.open()
-    #print(video_capture.isOpened())
-    #print("Video Capture set")
-    #ret, frame = video_capture.read()
+    video_capture = cv2.VideoCapture(0,cv2.CAP_DSHOW)
     #_,frame = video_capture.read()
-    #plot = plt.subplot(1,1,1)
-    #plt.title("Detecting Face")
-    #plt.axis('off')
-    #im1 = plot.imshow(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
 
     while True:
         # Grab a single frame of video

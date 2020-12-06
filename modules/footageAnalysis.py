@@ -8,7 +8,7 @@ import dlib
 import cv2
 import face_recognition.api as face_recognition
 import numpy as np
-
+from flask import flash
 #from imutils.face_utils import rect_to_bb , FaceAligner
 from modules.imageEnhancement import adjust_gamma
 from modules.config import FOOTAGES_PATH, STORAGE_PATH
@@ -56,7 +56,7 @@ def analyseFootage(clipname):
         if frame is None :
             break
         
-        frame = imutils.resize(frame ,width = 1200)
+        frame = imutils.resize(frame ,width = 600)
 
         frame =adjust_gamma(frame,gamma = 1.5)
         gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -142,27 +142,17 @@ def analyseFootage(clipname):
 
         #Showing the image in another window
         #Creates a window with window name "Face" and with the image img
-        cv2.imshow("Video feed (PRESS Q TO QUIT",frame)
-        #cv2.imencode('.jpg', frame)[1].tobytes()
-        #yield (b'--frame\r\n'
-        #       b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+        #cv2.imshow("Video feed (PRESS Q TO QUIT",frame)
+        frame = cv2.imencode('.jpg', frame)[1].tobytes()
+        #frame = buffer.tobytes()
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
-        if cv2.waitKey(1) == ord("q") :
-            break
-        #frame = imutils.resize(frame, width=450)
-        #frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        #frame = np.dstack([frame, frame, frame])
-        # display the size of the queue on the frame
-        #cv2.putText(frame, "Queue Size: {}".format(fvs.Q.qsize()),
-            #(10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
-        # show the frame and update the FPS counter
-        #cv2.imshow("Frame", frame)
-        #cv2.waitKey(1)
-        #fps.update()
-
+        #if cv2.waitKey(1) == ord("q") :
+        #    break
+        
 
     # do a bit of cleanup
     cv2.destroyAllWindows()
-    fvs.stop()
-
-    return 1
+    #fvs.stop()
+    return 
