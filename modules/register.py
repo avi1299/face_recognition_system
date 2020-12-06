@@ -88,7 +88,7 @@ def register_yourself(student_id):
         faces = detector(gray_frame,0)
         
         for face in faces:
-            
+            #print("here")
             if face is None:
                 print("face is none")
                 continue
@@ -114,6 +114,7 @@ def register_yourself(student_id):
         #im1.set_data(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
         #plt.pause(0.001)
         #plt.show()
+        
         cv2.imshow("Capturing Images for registration (PRESS Q TO QUIT",frame)
     
         if(cv2.waitKey(1) == ord("q")):
