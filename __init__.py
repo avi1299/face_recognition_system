@@ -4,6 +4,7 @@ from flask import Flask, render_template, url_for, request, redirect, flash, Res
 from modules.register import register_yourself, deregister_yourself, add_photos
 from modules.mark_attendance import mark_your_attendance
 from modules.footageAnalysis import analyseFootage
+import psycopg2
 
 app = Flask(__name__)
 app.secret_key = 'my secret key'      #Nothing important, type anything, just for flashing
@@ -17,7 +18,16 @@ def render_homepage():
 @app.route('/HAR', methods=['GET', 'POST'])
 def home_after_registration():
     id = request.form['Student_id']
-    if(register_yourself(id)):
+    name=request.form['Student_Name']
+    name=name.lower()
+    conn = psycopg2.connect(host="localhost",database="face_rec_db",user="postgres",password="atmanirbhar")
+    c=conn.cursor()
+    c.execute("SELECT count(*) FROM identity WHERE name = %(name)s and id_no=%(id_no)s;", {'name': name,'id_no':id})
+    res,=c.fetchone()
+    conn.close()
+    if(res!=1):
+        flash("Name and ID not consistent with AUGSD database")
+    elif(register_yourself(id)):
         flash("Registration Successful")
     else:
         flash("Registration already Exists. Either delete registration or add photos")
