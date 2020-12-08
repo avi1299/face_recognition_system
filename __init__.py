@@ -2,7 +2,7 @@
 
 from flask import Flask, render_template, url_for, request, redirect, flash, Response
 from modules.register import register_yourself, deregister_yourself, add_photos, is_already_reg
-from modules.mark_attendance import mark_your_attendance
+from modules.mark_attendance import mark_your_attendance, no_regs_yet
 from modules.footageAnalysis import analyseFootage
 import psycopg2
 
@@ -18,6 +18,7 @@ def render_homepage():
 def render_registration_page():
     return render_template("registration_page.html")
 
+####### FUNCTIONALITY TO REGISTER YOURSELF ########
 @app.route('/registration', methods=['GET', 'POST'])
 def render_registration():
     return render_template("register.html")
@@ -53,6 +54,9 @@ def reg_vid_feed():
     image_num = 0
     return Response(register_yourself(stud_id,frame_num,image_num,id_idx), mimetype='multipart/x-mixed-replace; boundary=frame')
 
+###############################################################################
+
+##### FUNCTIONALITY TO ADD MORE PHOTOS TO YOUR REGISTRATION #############
 @app.route('/addphotosfn', methods=['GET', 'POST'])
 def render_addphotosfn():
     return render_template("addphotos.html")
@@ -78,9 +82,11 @@ def addp_vid_feed():
     frame_num = 0
     start_idx = id_idx2[stud_id2]
     image_num = start_idx
-    return Response(add_photos(stud_id2,frame_num,image_num,id_idx), mimetype='multipart/x-mixed-replace; boundary=frame')
+    return Response(add_photos(stud_id2,frame_num,image_num,id_idx2,start_idx), mimetype='multipart/x-mixed-replace; boundary=frame')
 
+########################################################################
 
+######### FUNCTIONALITY TO DEREGISTER YOURSELF ################################## 
 @app.route('/deregistration', methods=['GET', 'POST'])
 def render_deregistration():
     return render_template("deregister.html")
@@ -94,16 +100,32 @@ def home_after_deregistration():
         flash("ID not found for Deregistration")
     return render_template("index.html")
 
+############################################################################
+
+############# FUNCTIONALITY TO MARK YOUR ATTENDANCE ######################
 
 @app.route('/attendance_in', methods=['GET', 'POST'])
 def attendance_in():
-    marked = mark_your_attendance(location)
-    if(marked == True):
-        flash("Attendence Marked Successfully")
+    global known_face_encodings, known_face_ids
+    regs,known_face_encodings,known_face_ids = no_regs_yet()
+    #marked = mark_your_attendance(location)
+    #if(marked == True):
+    #    flash("Attendence Marked Successfully")
+    #else:
+    #    flash("You are not registered yet")
+    if regs == True:
+        flash("No Registrations yet!")
+        return render_template("index.html")
     else:
-        flash("You are not registered yet")
+        return render_template("mark-att-vid-feed.html")
 
-    return render_template("index.html")
+@app.route('/mark_att_vid_feed')
+def mark_att_vid_feed():
+    return Response(mark_your_attendance(location,known_face_encodings,known_face_ids), mimetype='multipart/x-mixed-replace; boundary=frame')
+
+############################################################################
+
+#################### FUNCTIONALITY TO ANALYzE CCTC FOOTAGES ###################
 
 @app.route('/footage-analysis', methods=['GET', 'POST'])
 def render_footage_analysis():
@@ -122,10 +144,9 @@ def home_after_analysis():
 
 @app.route('/footage_feed')
 def footage_feed():
-    i = i + 1
-    j = j + 1
     return Response(analyseFootage(clipname), mimetype='multipart/x-mixed-replace; boundary=frame')
 
+####################################################################################
 
 if __name__ == '__main__':
     app.run(debug = True)

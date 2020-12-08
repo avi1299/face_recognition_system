@@ -10,8 +10,7 @@ import psycopg2
 from modules.config import STORAGE_PATH, DB_PATH
 from modules import imageEnhancement
 
-def mark_your_attendance(location):
-
+def no_regs_yet():
     try:
         with open( os.path.join(STORAGE_PATH, "known_face_ids.pickle"),"rb") as fp:
             known_face_ids = pickle.load(fp)
@@ -22,21 +21,15 @@ def mark_your_attendance(location):
         known_face_ids = []
 
     if known_face_ids==[]:
-        return False
+        return (True,known_face_encodings,known_face_ids)
+    else :
+        return (False,known_face_encodings,known_face_ids)
+
+def mark_your_attendance(location,known_face_encodings,known_face_ids):
 
     mpl.rcParams['toolbar'] = 'None'
 
-
-    # if(os.path.exists(CSV_PATH)):
-    #     csv_file = open(CSV_PATH, "a+")
-    #     writer = csv.writer(csv_file)
-
-    # else:
-    #     os.mknod(CSV_PATH)
-    #     csv_file = open(CSV_PATH, "w+")
-    #     writer = csv.writer(csv_file)
-    #     writer.writerow(["Student ID", "Date", "Time of Entry"])
-
+    
     if(os.path.exists(DB_PATH)):
         #rdbms='sqlite'
         #conn = psycopg2.connect(DB_PATH)
@@ -44,7 +37,6 @@ def mark_your_attendance(location):
         rdbms='postgresql'
         conn = psycopg2.connect(host="localhost",database="face_rec_db",user="postgres",password="atmanirbhar")
         c=conn.cursor()
-
     else:
         #os.mknod(DB_PATH)
         conn = sqlite3.connect(DB_PATH)
@@ -70,11 +62,10 @@ def mark_your_attendance(location):
     while True:
         # Grab a single frame of video
         _,frame = video_capture.read()
-        #print("Returned value: ",ret)
+
         #Applying face enhancement steps
         frame =imageEnhancement.adjust_gamma(frame,gamma = 1.5)
 
-        # print("FRAME READ WORKS")
         # Resize frame of video to 1/4 size for faster face recognition processing
         #small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
         small_frame = frame
@@ -146,19 +137,6 @@ def mark_your_attendance(location):
             font = cv2.FONT_HERSHEY_DUPLEX
             cv2.putText(frame, name, (left + 6, bottom - 6), font, 0.7, (255, 255, 255), 1)
 
-
-        # print("BEFORE sHOWING")
-        # Display the resulting image
-        cv2.imshow('Video', frame)
-        if cv2.waitKey(20) == ord("q"):
-            break
-
-        #plt.ion()
-        #im1.set_data(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
-        #plt.pause(0.001)
-        # as opencv loads in BGR format by default, we want to show it in RGB.
-        #plt.show()
-
         # print("AFTER SHOWING")
         # Hit 'q' on the keyboard to quit!
         if(sanity_count == 0):
@@ -178,22 +156,30 @@ def mark_your_attendance(location):
             # cv2.destroyAllWindows()
             sanity_count = 0
             # now = datetime.now()
-            # dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
-            # date = dt_string.split(" ")[0]
-            # time = dt_string.split(" ")[1]
-            # writer.writerow([name, date, time])
             # if(entry_or_exit==0):
             #     c.execute("INSERT INTO ATTENDANCE VALUES (?,datetime('now'),'IN');",(name, ))
             # else:
             #     c.execute("INSERT INTO ATTENDANCE VALUES (?,datetime('now'),'OUT');",(name, ))
+        
             if (rdbms=='sqlite'):
                 c.execute("INSERT INTO ATTENDANCE VALUES (?,datetime('now'),?);",(name, location, ))
             elif (rdbms=='postgresql'):
                 c.execute("INSERT INTO attendance VALUES (%s,now(),%s);",(name, location))
             conn.commit()
-
-            # print(name + date + time)
+    
             break
+
+        #OpenCV's implementation to show an image in window(doesn't work on production server)
+        #cv2.imshow("Marking Attendance (PRESS Q TO QUIT)",frame)
+        
+        #Encoding the frame to be stream into browser
+        frame = cv2.imencode('.jpg', frame)[1].tobytes()
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+
+        #if cv2.waitKey(20) == ord("q"):
+        #    break
+
 
     # Release handle to the webcam
 
