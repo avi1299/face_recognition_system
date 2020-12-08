@@ -36,7 +36,7 @@ Go to modules/config.py and set your `PROJECT_PATH`
 To launch the application, run the following command: 
 
 ```
-python3 app.py
+python3 __init__.py
 ```
 
 Go to: `localhost:5000` in your browser.

@@ -160,13 +160,13 @@ def mark_your_attendance(location,known_face_encodings,known_face_ids):
             #     c.execute("INSERT INTO ATTENDANCE VALUES (?,datetime('now'),'IN');",(name, ))
             # else:
             #     c.execute("INSERT INTO ATTENDANCE VALUES (?,datetime('now'),'OUT');",(name, ))
-        
+            
             if (rdbms=='sqlite'):
                 c.execute("INSERT INTO ATTENDANCE VALUES (?,datetime('now'),?);",(name, location, ))
             elif (rdbms=='postgresql'):
                 c.execute("INSERT INTO attendance VALUES (%s,now(),%s);",(name, location))
             conn.commit()
-    
+            
             break
 
         #OpenCV's implementation to show an image in window(doesn't work on production server)
