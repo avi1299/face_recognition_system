@@ -26,16 +26,16 @@ def render_registration():
 def home_after_registration():
     global stud_id 
     stud_id = request.form['Student_id']
-    #name=request.form['Student_Name']
-    #name=name.lower()
-    #conn = psycopg2.connect(host="localhost",database="face_rec_db",user="postgres",password="atmanirbhar")
-    #c=conn.cursor()
-    #c.execute("SELECT count(*) FROM identity WHERE name = %(name)s and id_no=%(id_no)s;", {'name': name,'id_no':stud_id})
-    #res,=c.fetchone()
-    #conn.close()
-    #if(res!=1):
-    #    flash("Name and ID not consistent with AUGSD database")
-    #    return render_template("index.html")
+    name=request.form['Student_Name']
+    name=name.lower()
+    conn = psycopg2.connect(host="localhost",database="face_rec_db",user="postgres",password="atmanirbhar")
+    c=conn.cursor()
+    c.execute("SELECT count(*) FROM identity WHERE name = %(name)s and id_no=%(id_no)s;", {'name': name,'id_no':stud_id})
+    res,=c.fetchone()
+    conn.close()
+    if(res!=1):
+        flash("Name and ID not consistent with AUGSD database")
+        return render_template("index.html")
     global id_idx
     reg,id_idx = is_already_reg(stud_id)
     if reg:
