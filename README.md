@@ -62,7 +62,7 @@ Our algorithm is divided into three main parts:
 
 We have used `Dlib`'s Histogram Oriented Gradients (HOG) based detector that is quick and accurate and hence usable for real time detection of faces. The cropped face from bounding box is passed forward for preprocessing.
 
-![HOG](./Images/HOG.PNG?raw=true "HOG")
+![HOG](./static/Images/HOG.PNG?raw=true "HOG")
 
 
 
@@ -83,7 +83,7 @@ A wiener filter is applied to remove the blur in an image caused by linear motio
 
 Sixty-eight landmark points are identified on the face using the `Dlib` python library. 
 
-![Dlib_Landmark_Points](./Images/Dlib_Landmark_Points.PNG?raw=true "Dlib_Landmark_Points")
+![Dlib_Landmark_Points](./static/Images/Dlib_Landmark_Points.PNG?raw=true "Dlib_Landmark_Points")
 
 - The above recognized facial landmark points are used for alignment purposes. We perform *affine transformation* using the above-recognised landmark points. Facial recognition algorithms perform better on aligned faces.
 
@@ -96,11 +96,11 @@ Sixty-eight landmark points are identified on the face using the `Dlib` python l
 
 We built a web platform where students can register themselves and mark their attendance once registered.
 
-![Home_Page](./Images/Home_Page.PNG?raw=true "Home_Page")
+![Home_Page](./static/Images/Home_Page.PNG?raw=true "Home_Page")
 
-![Registration_Page](./Images/Registration_Page.PNG?raw=true "Registration_Page")
+![Registration_Page](./static/Images/Registration_Page.PNG?raw=true "Registration_Page")
 
-![Identity_Recognition](./Images/Identity_Recognition.PNG?raw=true "Identity_Recognition")
+![Identity_Recognition](./static/Images/Identity_Recognition.PNG?raw=true "Identity_Recognition")
 
 ## Error Analysis
 
