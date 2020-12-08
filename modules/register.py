@@ -13,7 +13,21 @@ from imutils.face_utils import FaceAligner
 from modules import imageEnhancement
 from modules.config import DATA_PATH,LANDMARK_PATH,STORAGE_PATH
 
-def register_yourself(student_id):
+def is_already_reg(student_id):
+    #Loading the indices for the number of pictures stored per user
+    try:
+        with open( os.path.join(STORAGE_PATH, "id_idx.json"),"r") as fp:
+            id_idx = json.load(fp)
+    except:
+        id_idx = {}
+
+    #If the registration corresponding to the given ID already exists, return false
+    if(student_id in id_idx.keys()):
+        return (True,id_idx)    
+    else:
+        return (False,id_idx)
+
+def register_yourself(student_id,frame_num,image_num,id_idx):
 
     try:
         os.makedirs(DATA_PATH)
@@ -29,17 +43,6 @@ def register_yourself(student_id):
     except:
         known_face_encodings = []
         known_face_ids = []
-
-    #Loading the indices for the number of pictures stored per user
-    try:
-        with open( os.path.join(STORAGE_PATH, "id_idx.json"),"r") as fp:
-            id_idx = json.load(fp)
-    except:
-        id_idx = {}
-
-    #If the registration corresponding to the given ID already exists, return false
-    if(student_id in id_idx.keys()):
-        return False
 
     mpl.rcParams['toolbar'] = 'None'
     
@@ -62,9 +65,6 @@ def register_yourself(student_id):
     #Entry time
     tin = time.time()
 
-    i = 0
-    j = 0
-
     #frame = vs.read()
     #fig = plt.figure()
     #plot = plt.subplot(1,1,1)
@@ -72,10 +72,10 @@ def register_yourself(student_id):
     #plt.axis('off')
     #im1 = plot.imshow(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
 
-    while j < 10:   # Take 10 images
-        print(j)
-        i += 1
+    while image_num < 10:   # Take 10 images
+        
         _,frame = vs.read()
+        frame_num += 1
 
         #Resize each image
         #frame = cv2.resize(frame ,(600,600))
@@ -113,7 +113,7 @@ def register_yourself(student_id):
         #plt.pause(0.001)
         #plt.show()
         
-        if(i % 30 == 0):
+        if(frame_num % 30 == 0):
             
             #Uncommnet the line below to store the face images
             #cv2.imwrite(IMAGE_PATH + "/{}_".format(student_id) + str(j) + ".jpg", face_aligned)
@@ -124,7 +124,7 @@ def register_yourself(student_id):
                 known_face_ids.append(student_id)
             except:
                 continue
-            j += 1
+            image_num += 1
 
 
 
@@ -147,7 +147,7 @@ def register_yourself(student_id):
         pickle.dump(known_face_encodings,fp)
 
     #Noting the number of pictures already captured and storing the index
-    id_idx[student_id] = j
+    id_idx[student_id] = image_num
     with open( os.path.join(STORAGE_PATH, "id_idx.json"),"w") as outfile:
         json.dump(id_idx, outfile)
 
@@ -162,7 +162,7 @@ def register_yourself(student_id):
     cv2.destroyAllWindows()
     return True
 
-def add_photos(student_id):
+def add_photos(student_id,frame_num,image_num,id_idx,start_idx):
 
     try:
         os.makedirs(DATA_PATH)
@@ -179,17 +179,6 @@ def add_photos(student_id):
     except:
         known_face_encodings = []
         known_face_ids = []
-
-    #Loading the indices for the number of pictures stored per user
-    try:
-        with open( os.path.join(STORAGE_PATH, "id_idx.json"),"r") as fp:
-            id_idx = json.load(fp)
-    except:
-        id_idx = {}
-
-    #If there doesn't exists any registration corresponding to the given ID, return false
-    if(student_id not in id_idx.keys()):
-        return False
 
     mpl.rcParams['toolbar'] = 'None'
     
@@ -217,12 +206,12 @@ def add_photos(student_id):
     #Entry time
     tin = time.time()
 
-    i = 0
-    j = start
+    #i = 0
+    #j = start
 
-    while j < start + 10:   # Take 10 images
+    while image_num < start_idx + 10:   # Take 10 images
 
-        i += 1
+        frame_num += 1
         _,frame = vs.read()
 
         #Resize each image
@@ -255,7 +244,7 @@ def add_photos(student_id):
             
             #cv2.imshow("Image Captured",frame)
             #cv2.waitKey(50)
-            if(i % 30 == 0):
+            if(frame_num % 30 == 0):
             
                 #Uncommnet the line below to store the face files
                 #cv2.imwrite(IMAGE_PATH + "/{}_".format(student_id) + str(j) + ".jpg", face_aligned)
@@ -266,7 +255,7 @@ def add_photos(student_id):
                     known_face_ids.append(student_id)
                 except:
                     continue
-                j += 1
+                image_num += 1
 
         #OpenCV's implementation to show an image in window(doesn't work on production server)
         #cv2.imshow("Capturing Images for registration (PRESS Q TO QUIT",frame)
@@ -287,7 +276,7 @@ def add_photos(student_id):
         pickle.dump(known_face_encodings,fp)
 
     #Noting the number of pictures already captured and storing the index
-    id_idx[student_id] = j
+    id_idx[student_id] = image_num
 
     with open( os.path.join(STORAGE_PATH, "id_idx.json"),"w") as outfile:
         json.dump(id_idx, outfile)

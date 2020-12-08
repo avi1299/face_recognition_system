@@ -1,7 +1,7 @@
 # pylint: disable-all
 
 from flask import Flask, render_template, url_for, request, redirect, flash, Response
-from modules.register import register_yourself, deregister_yourself, add_photos
+from modules.register import register_yourself, deregister_yourself, add_photos, is_already_reg
 from modules.mark_attendance import mark_your_attendance
 from modules.footageAnalysis import analyseFootage
 import psycopg2
@@ -36,6 +36,11 @@ def home_after_registration():
     #if(res!=1):
     #    flash("Name and ID not consistent with AUGSD database")
     #    return render_template("index.html")
+    global id_idx
+    reg,id_idx = is_already_reg(stud_id)
+    if reg:
+        flash("Registration already Exists. Either delete registration or add photos")
+        return render_template("registration_page.html")
     #elif(register_yourself(id)):
     #    flash("Registration Successful")
     #else:
@@ -44,7 +49,9 @@ def home_after_registration():
 
 @app.route('/reg_vid_feed')
 def reg_vid_feed():
-    return Response(register_yourself(stud_id), mimetype='multipart/x-mixed-replace; boundary=frame')
+    frame_num = 0
+    image_num = 0
+    return Response(register_yourself(stud_id,frame_num,image_num,id_idx), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 @app.route('/addphotosfn', methods=['GET', 'POST'])
 def render_addphotosfn():
@@ -58,11 +65,20 @@ def home_after_addphotos():
     #    flash("Photos added Successful")
     #else:
     #    flash("Registration doesn't exist. Please Register yourself first")
+    global id_idx2
+    reg,id_idx2 = is_already_reg(stud_id2)
+    if not reg:
+        flash("Registration doesn't exist. Please Register yourself first")
+        return render_template("registration_page.html")
+
     return render_template("addp-vid-feed.html")
 
 @app.route('/addp_vid_feed')
 def addp_vid_feed():
-    return Response(add_photos(stud_id2), mimetype='multipart/x-mixed-replace; boundary=frame')
+    frame_num = 0
+    start_idx = id_idx2[stud_id2]
+    image_num = start_idx
+    return Response(add_photos(stud_id2,frame_num,image_num,id_idx), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
 @app.route('/deregistration', methods=['GET', 'POST'])
