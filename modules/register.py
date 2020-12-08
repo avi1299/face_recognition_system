@@ -73,7 +73,7 @@ def register_yourself(student_id):
     #im1 = plot.imshow(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
 
     while j < 10:   # Take 10 images
-
+        print(j)
         i += 1
         _,frame = vs.read()
 
@@ -88,7 +88,7 @@ def register_yourself(student_id):
         faces = detector(gray_frame,0)
         
         for face in faces:
-            #print("here")
+
             if face is None:
                 print("face is none")
                 continue
@@ -106,8 +106,6 @@ def register_yourself(student_id):
             frame = cv2.rectangle(frame,(x,y),(x+w,y+h),(0,255,0),1)
             
             #cv2.imshow("Image Captured",frame)
-            # Before continuing to the next loop, I want to give it a little pause
-            # waitKey of 50 millisecond
             #cv2.waitKey(50)
 
         #plt.ion()
@@ -115,12 +113,6 @@ def register_yourself(student_id):
         #plt.pause(0.001)
         #plt.show()
         
-        cv2.imshow("Capturing Images for registration (PRESS Q TO QUIT",frame)
-    
-        if(cv2.waitKey(1) == ord("q")):
-            break
-
-
         if(i % 30 == 0):
             
             #Uncommnet the line below to store the face images
@@ -133,6 +125,20 @@ def register_yourself(student_id):
             except:
                 continue
             j += 1
+
+
+
+        #OpenCV's implementation to show an image in window(doesn't work on production server)
+        #cv2.imshow("Capturing Images for registration (PRESS Q TO QUIT",frame)
+        
+        #Encoding the frame to be stream into browser
+        frame = cv2.imencode('.jpg', frame)[1].tobytes()
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+
+
+        #if(cv2.waitKey(1) == ord("q")):
+        #    break
 
     #Storing the face encodings and corresponding IDs to disk
     with open( os.path.join(STORAGE_PATH, "known_face_ids.pickle"),"wb") as fp:
@@ -214,12 +220,6 @@ def add_photos(student_id):
     i = 0
     j = start
 
-    #frame = vs.read()
-    #plot = plt.subplot(1,1,1)
-    #plt.title("Detecting Face")
-    #plt.axis('off')
-    #im1 = plot.imshow(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
-
     while j < start + 10:   # Take 10 images
 
         i += 1
@@ -236,7 +236,7 @@ def add_photos(student_id):
         faces = detector(gray_frame,0)
         
         for face in faces:
-            #print("inside for loop")
+
             if face is None:
                 print("face is none")
                 continue
@@ -254,33 +254,32 @@ def add_photos(student_id):
             frame = cv2.rectangle(frame,(x,y),(x+w,y+h),(0,255,0),1)
             
             #cv2.imshow("Image Captured",frame)
-            # Before continuing to the next loop, I want to give it a little pause
-            # waitKey of 50 millisecond
             #cv2.waitKey(50)
-
-        #plt.ion()
-        #im1.set_data(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
-        #plt.pause(0.001)
-        #plt.show()
-
-        cv2.imshow("Capturing Images for registration (PRESS Q TO QUIT",frame)
-    
-        if(cv2.waitKey(1) == ord("q")):
-            break
-        
-        if(i % 30 == 0):
+            if(i % 30 == 0):
             
-            #Uncommnet the line below to store the face files
-            #cv2.imwrite(IMAGE_PATH + "/{}_".format(student_id) + str(j) + ".jpg", face_aligned)
+                #Uncommnet the line below to store the face files
+                #cv2.imwrite(IMAGE_PATH + "/{}_".format(student_id) + str(j) + ".jpg", face_aligned)
 
-            #Appending the face encodings and corresponding IDs 
-            try:
-                known_face_encodings.append(face_recognition.face_encodings(frame)[0])
-                known_face_ids.append(student_id)
-            except:
-                continue
-            j += 1
+                #Appending the face encodings and corresponding IDs 
+                try:
+                    known_face_encodings.append(face_recognition.face_encodings(frame)[0])
+                    known_face_ids.append(student_id)
+                except:
+                    continue
+                j += 1
 
+        #OpenCV's implementation to show an image in window(doesn't work on production server)
+        #cv2.imshow("Capturing Images for registration (PRESS Q TO QUIT",frame)
+        
+        #Encoding the frame to be stream into browser
+        frame = cv2.imencode('.jpg', frame)[1].tobytes()
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+
+        #if(cv2.waitKey(1) == ord("q")):
+        #    break
+        
+        
     #Storing the face encodings and corresponding IDs to disk
     with open( os.path.join(STORAGE_PATH, "known_face_ids.pickle"),"wb") as fp:
         pickle.dump(known_face_ids,fp)

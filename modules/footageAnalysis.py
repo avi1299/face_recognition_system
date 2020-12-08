@@ -144,14 +144,13 @@ def analyseFootage(clipname):
         #Creates a window with window name "Face" and with the image img
         #cv2.imshow("Video feed (PRESS Q TO QUIT",frame)
         frame = cv2.imencode('.jpg', frame)[1].tobytes()
-        #frame = buffer.tobytes()
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
         #if cv2.waitKey(1) == ord("q") :
         #    break
         
-
+    print("here")
     # do a bit of cleanup
     cv2.destroyAllWindows()
     #fvs.stop()

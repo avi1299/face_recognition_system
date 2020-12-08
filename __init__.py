@@ -14,24 +14,60 @@ location="LIBRARY"
 def render_homepage():
     return render_template("index.html")
 
+@app.route('/registration_page', methods=['GET', 'POST'])
+def render_registration_page():
+    return render_template("registration_page.html")
 
-@app.route('/HAR', methods=['GET', 'POST'])
+@app.route('/registration', methods=['GET', 'POST'])
+def render_registration():
+    return render_template("register.html")
+
+@app.route('/registration/reg-vid-feed', methods=['GET', 'POST'])
 def home_after_registration():
-    id = request.form['Student_id']
-    name=request.form['Student_Name']
-    name=name.lower()
-    conn = psycopg2.connect(host="localhost",database="face_rec_db",user="postgres",password="atmanirbhar")
-    c=conn.cursor()
-    c.execute("SELECT count(*) FROM identity WHERE name = %(name)s and id_no=%(id_no)s;", {'name': name,'id_no':id})
-    res,=c.fetchone()
-    conn.close()
-    if(res!=1):
-        flash("Name and ID not consistent with AUGSD database")
-    elif(register_yourself(id)):
-        flash("Registration Successful")
-    else:
-        flash("Registration already Exists. Either delete registration or add photos")
-    return render_template("index.html")
+    global stud_id 
+    stud_id = request.form['Student_id']
+    #name=request.form['Student_Name']
+    #name=name.lower()
+    #conn = psycopg2.connect(host="localhost",database="face_rec_db",user="postgres",password="atmanirbhar")
+    #c=conn.cursor()
+    #c.execute("SELECT count(*) FROM identity WHERE name = %(name)s and id_no=%(id_no)s;", {'name': name,'id_no':stud_id})
+    #res,=c.fetchone()
+    #conn.close()
+    #if(res!=1):
+    #    flash("Name and ID not consistent with AUGSD database")
+    #    return render_template("index.html")
+    #elif(register_yourself(id)):
+    #    flash("Registration Successful")
+    #else:
+    #    flash("Registration already Exists. Either delete registration or add photos")
+    return render_template("reg-vid-feed.html")
+
+@app.route('/reg_vid_feed')
+def reg_vid_feed():
+    return Response(register_yourself(stud_id), mimetype='multipart/x-mixed-replace; boundary=frame')
+
+@app.route('/addphotosfn', methods=['GET', 'POST'])
+def render_addphotosfn():
+    return render_template("addphotos.html")
+
+@app.route('/addphotosfn/addp-vid-feed', methods=['GET', 'POST'])
+def home_after_addphotos():
+    global stud_id2 
+    stud_id2 = request.form['Student_id']
+    #if(add_photos(id)):
+    #    flash("Photos added Successful")
+    #else:
+    #    flash("Registration doesn't exist. Please Register yourself first")
+    return render_template("addp-vid-feed.html")
+
+@app.route('/addp_vid_feed')
+def addp_vid_feed():
+    return Response(add_photos(stud_id2), mimetype='multipart/x-mixed-replace; boundary=frame')
+
+
+@app.route('/deregistration', methods=['GET', 'POST'])
+def render_deregistration():
+    return render_template("deregister.html")
 
 @app.route('/HAD', methods=['GET', 'POST'])
 def home_after_deregistration():
@@ -42,32 +78,6 @@ def home_after_deregistration():
         flash("ID not found for Deregistration")
     return render_template("index.html")
 
-
-@app.route('/HAA', methods=['GET', 'POST'])
-def home_after_addphotos():
-    id = request.form['Student_id']
-    if(add_photos(id)):
-        flash("Photos added Successful")
-    else:
-        flash("Registration doesn't exist. Please Register yourself first")
-    return render_template("index.html")
-
-
-@app.route('/registration', methods=['GET', 'POST'])
-def render_registration():
-    return render_template("register.html")
-
-@app.route('/deregistration', methods=['GET', 'POST'])
-def render_deregistration():
-    return render_template("deregister.html")
-
-@app.route('/addphotosfn', methods=['GET', 'POST'])
-def render_addphotosfn():
-    return render_template("addphotos.html")
-
-@app.route('/registration_page', methods=['GET', 'POST'])
-def render_registration_page():
-    return render_template("registration_page.html")
 
 @app.route('/attendance_in', methods=['GET', 'POST'])
 def attendance_in():
@@ -83,7 +93,7 @@ def attendance_in():
 def render_footage_analysis():
     return render_template("footageanalysis.html")
 
-@app.route('/HAFA', methods=['GET', 'POST'])
+@app.route('/footage-analysis/footage-feed', methods=['GET', 'POST'])
 def home_after_analysis():
     global clipname 
     clipname= request.form['Clip_name']
@@ -92,10 +102,12 @@ def home_after_analysis():
     #else:
     #    flash("File does not exist. Check name again")   
 
-    return render_template("videofeed.html")
+    return render_template("footagefeed.html")
 
 @app.route('/footage_feed')
 def footage_feed():
+    i = i + 1
+    j = j + 1
     return Response(analyseFootage(clipname), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
